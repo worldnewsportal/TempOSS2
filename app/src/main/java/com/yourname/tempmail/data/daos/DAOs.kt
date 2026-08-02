@@ -6,6 +6,14 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.yourname.tempmail.data.db.AdRewardEntity
+import com.yourname.tempmail.data.db.AttachmentEntity
+import com.yourname.tempmail.data.db.DraftEntity
+import com.yourname.tempmail.data.db.FavoriteEntity
+import com.yourname.tempmail.data.db.MailboxEntity
+import com.yourname.tempmail.data.db.MessageEntity
+import com.yourname.tempmail.data.db.ProviderEntity
+import com.yourname.tempmail.data.db.SettingsEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
