@@ -14,7 +14,7 @@ data class EmailAddress(
     val full: String get() = "$login@$domain"
 
     companion object {
-        private val LOCAL_PART = Regex("^[A-Za-z0-9.\\-_]{3,64}$")
+        private val LOCAL_PART = Regex("^[A-Za-z0-9.\\-_+]{3,64}$")
 
         fun from(fullAddress: String): EmailAddress? {
             val at = fullAddress.lastIndexOf('@')

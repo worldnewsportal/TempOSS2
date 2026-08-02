@@ -13,9 +13,11 @@ import com.yourname.tempmail.network.OneSecAttachment
 import com.yourname.tempmail.network.OneSecmailApi
 import com.yourname.tempmail.security.HtmlSanitizer
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -43,7 +45,7 @@ class OneSecmailProvider(
     private val client = okHttp.newBuilder()
         .connectTimeout(20, TimeUnit.SECONDS)
         .build()
-    private val api: OneSecmailApi = NetworkClient.retrofit(BASE_URL, okHttp).create(OneSecmailApi::class.java)
+    private val api: OneSecmailApi = NetworkClient.retrofit(BASE_URL, client).create(OneSecmailApi::class.java)
 
     override val id: String = "onesecmail"
     override val displayName: String = "1secmail"
@@ -68,7 +70,7 @@ class OneSecmailProvider(
             if (r.isSuccessful) ProviderResult.Success(r.body() ?: emptyList())
             else ProviderResult.Failure("err.provider")
         } catch (e: Exception) {
-            ProviderResult.Failure("err.timeout", e)
+            NetworkClient.toResult(e)
         }
     }
 
@@ -80,7 +82,7 @@ class OneSecmailProvider(
             if (addresses.isEmpty()) ProviderResult.Failure("err.provider")
             else ProviderResult.Success(addresses)
         } catch (e: Exception) {
-            ProviderResult.Failure("err.timeout", e)
+            NetworkClient.toResult(e)
         }
     }
 
@@ -104,7 +106,7 @@ class OneSecmailProvider(
                 )
             })
         } catch (e: Exception) {
-            ProviderResult.Failure("err.timeout", e)
+            NetworkClient.toResult(e)
         }
     }
 
@@ -129,7 +131,7 @@ class OneSecmailProvider(
                 )
             )
         } catch (e: Exception) {
-            ProviderResult.Failure("err.timeout", e)
+            NetworkClient.toResult(e)
         }
     }
 
@@ -150,7 +152,7 @@ class OneSecmailProvider(
             val bytes = r.body()?.bytes() ?: return ProviderResult.Failure("err.provider")
             ProviderResult.Success(bytes)
         } catch (e: Exception) {
-            ProviderResult.Failure("err.timeout", e)
+            NetworkClient.toResult(e)
         }
     }
 
@@ -158,8 +160,18 @@ class OneSecmailProvider(
         val req = Request.Builder()
             .url("wss://www.1secmail.com/ws/?login=${mailbox.email.login}&domain=${mailbox.email.domain}")
             .build()
-        val event = awaitOneWsMessage(client, req)
-        if (event.isNotEmpty()) emit(event)
+        // Loop so the flow keeps emitting as new WebSocket messages arrive,
+        // until the caller's coroutine scope is cancelled.
+        while (currentCoroutineContext().isActive) {
+            val event = try {
+                awaitOneWsMessage(client, req)
+            } catch (e: Exception) {
+                // Transient WebSocket failure; back off briefly and reconnect.
+                kotlinx.coroutines.delay(RECONNECT_BACKOFF_MS)
+                continue
+            }
+            if (event.isNotEmpty()) emit(event)
+        }
     }.flowOn(Dispatchers.IO)
 
     private suspend fun awaitOneWsMessage(client: OkHttpClient, request: Request): String =
@@ -193,7 +205,12 @@ class OneSecmailProvider(
         val text = raw.trim()
         val angle = text.indexOf('<')
         return if (angle > 0) {
-            Contact(name = text.substring(0, angle).trim(), address = text.substring(angle + 1, text.indexOf('>')).trim())
+            val close = text.indexOf('>', angle)
+            if (close < 0) {
+                Contact(address = text)
+            } else {
+                Contact(name = text.substring(0, angle).trim(), address = text.substring(angle + 1, close).trim())
+            }
         } else {
             Contact(address = text)
         }
@@ -209,5 +226,6 @@ class OneSecmailProvider(
 
     companion object {
         private const val BASE_URL = "https://www.1secmail.com/"
+        private const val RECONNECT_BACKOFF_MS = 5_000L
     }
 }

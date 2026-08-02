@@ -47,7 +47,7 @@ abstract class TempmailDatabase : RoomDatabase() {
                     TempmailDatabase::class.java,
                     "tempmail.db",
                 )
-                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration(dropAllTables = true)
                     .build()
                     .also { INSTANCE = it }
             }

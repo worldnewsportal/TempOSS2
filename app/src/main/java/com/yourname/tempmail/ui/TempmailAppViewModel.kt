@@ -70,7 +70,7 @@ class TempmailAppViewModel(
 
     fun enterMailbox(mailbox: Mailbox) {
         _currentMailbox.value = mailbox
-        consumeEvent(UiEvent.Navigate("inbox/${mailbox.id}"))
+        emit(UiEvent.NavigateMailbox(mailbox.id))
     }
 
     fun emit(event: UiEvent) {

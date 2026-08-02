@@ -16,7 +16,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -125,11 +124,13 @@ fun InboxScreen(
                     Icon(Icons.Filled.Email, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
                     Spacer(Modifier.height(16.dp))
                     Text(stringResource(R.string.no_messages), style = MaterialTheme.typography.bodyMedium)
-                    Spacer(Modifier.height(16.dp))
-                    OutlinedButton(onClick = {}) {
-                        Icon(Icons.Filled.Send, contentDescription = null)
-                        Spacer(Modifier.width(6.dp))
-                        Text(stringResource(R.string.send_unavailable))
+                    if (!canSend) {
+                        Spacer(Modifier.height(16.dp))
+                        OutlinedButton(onClick = {}) {
+                            Icon(Icons.Filled.Send, contentDescription = null)
+                            Spacer(Modifier.width(6.dp))
+                            Text(stringResource(R.string.send_unavailable))
+                        }
                     }
                 }
             } else {
@@ -149,6 +150,7 @@ fun InboxScreen(
 
 @Composable
 private fun MessageRow(msg: MessageEntity, onClick: () -> Unit) {
+    val noSubject = stringResource(R.string.no_subject)
     Card(onClick = onClick, modifier = Modifier.fillMaxWidth()) {
         Row(Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.Top) {
             Column(Modifier.weight(1f)) {
@@ -159,7 +161,7 @@ private fun MessageRow(msg: MessageEntity, onClick: () -> Unit) {
                 )
                 Spacer(Modifier.height(2.dp))
                 Text(
-                    msg.subject.ifBlank { "(no subject)" },
+                    msg.subject.ifBlank { noSubject },
                     style = MaterialTheme.typography.bodyMedium,
                     color = if (msg.seen) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
                 )

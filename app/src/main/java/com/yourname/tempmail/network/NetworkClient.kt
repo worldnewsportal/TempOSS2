@@ -3,7 +3,6 @@ package com.yourname.tempmail.network
 import com.yourname.tempmail.domain.ProviderResult
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient

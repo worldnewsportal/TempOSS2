@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -21,8 +20,6 @@ import com.yourname.tempmail.ui.inbox.InboxScreen
 import com.yourname.tempmail.ui.inbox.ReaderScreen
 import com.yourname.tempmail.ui.onboarding.OnboardingScreen
 import com.yourname.tempmail.ui.settings.SettingsScreen
-import com.yourname.tempmail.ui.theme.TempmailTheme
-import com.yourname.tempmail.ui.theme.ThemeMode
 import kotlinx.coroutines.flow.collectLatest
 
 object Routes {
@@ -43,13 +40,7 @@ fun TempmailNavHost(
     appViewModel: TempmailAppViewModel,
 ) {
     val navController = rememberNavController()
-    val locale by appViewModel.locale.collectAsStateWithLifecycle()
-    val themeKey by appViewModel.themeMode.collectAsStateWithLifecycle()
     val onboardingDone by appViewModel.onboardingDone.collectAsStateWithLifecycle()
-
-    val themeMode = remember(themeKey) {
-        ThemeMode.entries.firstOrNull { it.key == themeKey } ?: ThemeMode.SYSTEM
-    }
 
     LaunchedEffect(appViewModel) {
         appViewModel.events.collectLatest { event ->
@@ -76,71 +67,69 @@ fun TempmailNavHost(
         }
     }
 
-    TempmailTheme(themeMode = themeMode) {
-        NavHost(
-            navController = navController,
-            startDestination = if (onboardingDone) Routes.HOME else Routes.ONBOARDING,
-        ) {
-            composable(Routes.ONBOARDING) {
-                OnboardingScreen(
-                    onDone = {
-                        if (!appViewModel.adsConsentShown.value) {
-                            appViewModel.setAdsConsent(accepted = false, hasReviewed = true)
-                        }
-                        appViewModel.finishOnboarding()
-                        navController.navigate(Routes.HOME) {
-                            popUpTo(Routes.ONBOARDING) { inclusive = true }
-                        }
-                    },
-                )
-            }
-            composable(Routes.HOME) {
-                HomeScreen(
-                    container = container,
-                    onOpenMailbox = { appViewModel.emit(UiEvent.NavigateMailbox(it.id)) },
-                    onCreate = { appViewModel.emit(UiEvent.NavigateCreate) },
-                    onSettings = { appViewModel.emit(UiEvent.NavigateSettings) },
-                )
-            }
-            composable(Routes.CREATE) {
-                CreateScreen(
-                    container = container,
-                    onDone = { appViewModel.emit(UiEvent.NavigateBack) },
-                )
-            }
-            composable(Routes.SETTINGS) {
-                SettingsScreen(
-                    container = container,
-                    appViewModel = appViewModel,
-                    onBack = { appViewModel.emit(UiEvent.NavigateBack) },
-                )
-            }
-            composable(
-                route = Routes.INBOX,
-                arguments = listOf(navArgument("mailboxId") { type = NavType.LongType }),
-            ) { entry ->
-                val mailboxId = entry.arguments?.getLong("mailboxId") ?: 0L
-                InboxScreen(
-                    container = container,
-                    mailboxId = mailboxId,
-                    onMessage = { msgId -> appViewModel.emit(UiEvent.NavigateMessage(mailboxId, msgId)) },
-                    onBack = { appViewModel.emit(UiEvent.NavigateBack) },
-                )
-            }
-            composable(
-                route = Routes.READER,
-                arguments = listOf(
-                    navArgument("mailboxId") { type = NavType.LongType },
-                    navArgument("messageId") { type = NavType.LongType },
-                ),
-            ) { entry ->
-                ReaderScreen(
-                    container = container,
-                    mailboxId = entry.arguments?.getLong("mailboxId") ?: 0L,
-                    messageId = entry.arguments?.getLong("messageId") ?: 0L,
-                    onBack = { appViewModel.emit(UiEvent.NavigateBack) },
-                )
-            }
+    NavHost(
+        navController = navController,
+        startDestination = if (onboardingDone) Routes.HOME else Routes.ONBOARDING,
+    ) {
+        composable(Routes.ONBOARDING) {
+            OnboardingScreen(
+                onDone = {
+                    if (!appViewModel.adsConsentShown.value) {
+                        appViewModel.setAdsConsent(accepted = false, hasReviewed = true)
+                    }
+                    appViewModel.finishOnboarding()
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.ONBOARDING) { inclusive = true }
+                    }
+                },
+            )
+        }
+        composable(Routes.HOME) {
+            HomeScreen(
+                container = container,
+                onOpenMailbox = { appViewModel.emit(UiEvent.NavigateMailbox(it.id)) },
+                onCreate = { appViewModel.emit(UiEvent.NavigateCreate) },
+                onSettings = { appViewModel.emit(UiEvent.NavigateSettings) },
+            )
+        }
+        composable(Routes.CREATE) {
+            CreateScreen(
+                container = container,
+                onDone = { appViewModel.emit(UiEvent.NavigateBack) },
+            )
+        }
+        composable(Routes.SETTINGS) {
+            SettingsScreen(
+                container = container,
+                appViewModel = appViewModel,
+                onBack = { appViewModel.emit(UiEvent.NavigateBack) },
+            )
+        }
+        composable(
+            route = Routes.INBOX,
+            arguments = listOf(navArgument("mailboxId") { type = NavType.LongType }),
+        ) { entry ->
+            val mailboxId = entry.arguments?.getLong("mailboxId") ?: 0L
+            InboxScreen(
+                container = container,
+                mailboxId = mailboxId,
+                onMessage = { msgId -> appViewModel.emit(UiEvent.NavigateMessage(mailboxId, msgId)) },
+                onBack = { appViewModel.emit(UiEvent.NavigateBack) },
+            )
+        }
+        composable(
+            route = Routes.READER,
+            arguments = listOf(
+                navArgument("mailboxId") { type = NavType.LongType },
+                navArgument("messageId") { type = NavType.LongType },
+            ),
+        ) { entry ->
+            ReaderScreen(
+                container = container,
+                mailboxId = entry.arguments?.getLong("mailboxId") ?: 0L,
+                messageId = entry.arguments?.getLong("messageId") ?: 0L,
+                onBack = { appViewModel.emit(UiEvent.NavigateBack) },
+            )
         }
     }
 }

@@ -6,6 +6,7 @@ import com.yourname.tempmail.sync.SyncWorker
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 /**
@@ -24,5 +25,12 @@ class TempmailApp : Application() {
         appScope.launch {
             SyncWorker.schedule(this@TempmailApp)
         }
+    }
+
+    override fun onTerminate() {
+        container.providers.cancel()
+        container.ads.rewardManager.cancel()
+        appScope.cancel()
+        super.onTerminate()
     }
 }

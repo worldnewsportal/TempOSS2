@@ -41,7 +41,7 @@
     <string name="unfavorite">إزالة من المفضلة</string>
     <string name="rename">إعادة تسمية</string>
     <string name="open">فتح</string>
-    <string name="username_invalid_chars">اسم المستخدم غير صالح؛ يجب أن يحتوي أحرفاً وأرقاماً أو نقطة أو شرطة أو تسطيراً</string>
+    <string name="username_invalid_chars">اسم المستخدم غير صالح؛ يجب أن يحتوي أحرفاً وأرقاماً أو نقطة أو شرطة أو تسطيراً أو علامة زائد</string>
     <string name="username_too_short">اسم المستخدم قصير جداً (3 أحرف على الأقل)</string>
     <string name="username_too_long">اسم المستخدم طويل جداً (64 حرفاً كحد أقصى)</string>
     <string name="username_reserved">هذا الاسم محجوز ولا يمكن استخدامه</string>
@@ -53,9 +53,10 @@
 
     <string name="no_messages">لا توجد رسائل بعد. ستظهر الرسائل الواردة هنا</string>
     <string name="unread_count">%1$d غير مقروءة</string>
+    <string name="no_subject">(بلا موضوع)</string>
     <string name="messages">الرسائل</string>
     <string name="attachments">المرفقات</string>
-    <string name="attachment_name">%1$s · %2$s</string>
+    <string name="attachment_name_size">%1$s · %2$s</string>
     <string name="download">تحميل</string>
     <string name="mark_read">تحديد كمقروءة</string>
     <string name="mark_unread">تحديد كغير مقروءة</string>
@@ -95,7 +96,7 @@
 
     <string name="notification_channel_name">بريد جديد</string>
     <string name="notification_channel_desc">إشعارات عند وصول رسائل جديدة</string>
-    <string name="new_mail_message">رسالة جديدة لصالح %1$s</string>
+    <string name="new_mail_ticker">رسالة جديدة لصالح %1$s</string>
 
     <string name="settings">الإعدادات</string>
     <string name="language">اللغة</string>
@@ -119,7 +120,8 @@
     <string name="auto_refresh_1m">كل دقيقة</string>
     <string name="auto_refresh_5m">كل 5 دقائق</string>
     <string name="auto_refresh_10m">كل 10 دقائق</string>
-    <string name="privacy">البيانات والخصوصية</string>
+    <string name="provider_info">المزوّد</string>
+    <string name="storage">البيانات والخصوصية</string>
     <string name="delete_all_mailboxes">حذف كل صناديق البريد</string>
     <string name="delete_all_mailboxes_msg">سيؤدي ذلك إلى حذف جميع صناديق البريد المؤقتة والبيانات المحفوظة من هذا الجهاز</string>
     <string name="about">حول التطبيق</string>
@@ -135,17 +137,17 @@
     <string name="ad_available">الإعلان متاح</string>
     <string name="ad_not_available">لا يوجد إعلان متاح الآن. حاول مرة أخرى</string>
     <string name="ad_watch_hint">شاهد إعلاناً قصيراً لفتح هذه الميزة الاختيارية</string>
-    <string name="ad_reward">تهانينا! تم منح المكافأة</string>
+    <string name="ad_rewarded">تهانينا! تم منح المكافأة</string>
     <string name="ad_failed">فشل الإعلان ولم تُمنح أية مكافأة</string>
     <string name="ad_closed_early">أغلقت الإعلان مبكراً، لذلك لم تُمنح المكافأة</string>
     <string name="ads_not_configured">لم يتم إعداد الإعلانات لهذا الإصدار (أضف App Key في local.properties)</string>
     <string name="ads_opt_in_title">حول الإعلانات</string>
     <string name="ads_opt_in_msg">يحتوي هذا التطبيق على إعلانات من جهات خارجية لإبقائه مجاناً. ميزات البريد لا تعتمد على الإعلانات أبداً، ويمكنك إيقافها من الإعدادات. هل تقبل عرض الإعلانات؟</string>
     <string name="ads_declined">لن تُعرض لك إعلانات</string>
-    <string name="unlock_extra_slots">فتح خانة بريد إضافية</string>
-    <string name="unlock_organization">فتح ميزة التنظيم المتقدم</string>
+    <string name="unlock_extra_slot">فتح خانة بريد إضافية</string>
+    <string name="unlock_organize">فتح ميزة التنظيم المتقدم</string>
     <string name="unlock_customize">فتح التخصيص المميز (المظهر الأسود)</string>
-    <string name="reward_already_owned">أنت تمتلك هذه المكافأة بالفعل</string>
+    <string name="reward_already_held">أنت تمتلك هذه المكافأة بالفعل</string>
 
     <string name="mailbox_expired_notif">انتهت صلاحية صندوق %1$s وتم حذف بياناته</string>
     <string name="days_remaining">بقي %1$s</string>

@@ -4,6 +4,7 @@ import com.yourname.tempmail.data.db.AdRewardEntity
 import com.yourname.tempmail.data.daos.AdRewardDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -22,11 +23,16 @@ class RewardManager(
     val owned: StateFlow<List<RewardId>> =
         adRewardDao.observeAll()
             .map { list -> list.mapNotNull { e -> RewardId.entries.firstOrNull { it.id == e.id } } }
-            .stateIn(scope, SharingStarted.Eagerly, emptyList())
+            .stateIn(scope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    fun owns(rewardId: RewardId): Boolean = adRewardDao.byId(rewardId.id) != null
+    suspend fun owns(rewardId: RewardId): Boolean = adRewardDao.byId(rewardId.id) != null
 
-    fun grant(rewardId: RewardId) {
+    suspend fun grant(rewardId: RewardId) {
         adRewardDao.insert(AdRewardEntity(id = rewardId.id, grantedAt = System.currentTimeMillis()))
+    }
+
+    /** Cancel the internal scope. Call from Application.onTerminate(). */
+    fun cancel() {
+        scope.cancel()
     }
 }

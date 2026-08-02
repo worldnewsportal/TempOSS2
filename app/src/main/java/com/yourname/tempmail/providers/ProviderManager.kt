@@ -5,6 +5,7 @@ import com.yourname.tempmail.domain.ProviderResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -35,6 +36,11 @@ class ProviderManager(
     fun refresh() = scope.launch {
         registry.refreshHealth()
         _currentProvider.value = registry.usable().firstOrNull()
+    }
+
+    /** Cancel internal coroutines. Call from Application.onTerminate(). */
+    fun cancel() {
+        scope.cancel()
     }
 
     suspend fun domainsFor(id: String): ProviderResult<List<String>> =

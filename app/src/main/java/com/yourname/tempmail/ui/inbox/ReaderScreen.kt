@@ -33,6 +33,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.yourname.tempmail.R
 import com.yourname.tempmail.di.AppContainer
 import com.yourname.tempmail.security.UrlValidator
+import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.Date
 
@@ -63,6 +65,7 @@ fun ReaderScreen(
     val context = LocalContext.current
     val mailboxRepo = container.mailboxes
     val messagesRepo = container.messages
+    val scope = rememberCoroutineScope()
 
     val mailboxes by mailboxRepo.observeAllIncludingExpired().collectAsStateWithLifecycle(initialValue = emptyList())
     val mailbox = mailboxes.firstOrNull { it.id == mailboxId }
@@ -86,7 +89,7 @@ fun ReaderScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(msg?.subject?.ifBlank { "(no subject)" } ?: "") },
+                title = { Text(msg?.subject?.ifBlank { stringResource(R.string.no_subject) } ?: "") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.close))
@@ -94,8 +97,9 @@ fun ReaderScreen(
                 },
                 actions = {
                     IconButton(onClick = {
-                        if (msg != null) {
-                            messagesRepo.markStarred(msg!!.id, !msg!!.starred)
+                        val current = msg
+                        if (current != null) {
+                            scope.launch { messagesRepo.markStarred(current.id, !current.starred) }
                         }
                     }) {
                         Icon(
@@ -142,7 +146,7 @@ fun ReaderScreen(
                     }
                     html != null -> SafeHtmlBody(html!!, context)
                     else -> Text(
-                        stringResource(if (msg!!.bodyHtml != null) R.string.html_blocked else R.string.empty),
+                        stringResource(R.string.empty),
                         style = MaterialTheme.typography.bodyMedium,
                     )
                 }

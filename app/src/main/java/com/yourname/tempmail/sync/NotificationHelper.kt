@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.yourname.tempmail.MainActivity
+import com.yourname.tempmail.R
 
 /** Real notification for a newly-arrived message (rule #20). */
 class NotificationHelper {
@@ -49,9 +50,9 @@ class NotificationHelper {
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channel = NotificationChannel(
             CHANNEL_ID,
-            "Incoming mail",
+            context.getString(R.string.notification_channel_name),
             NotificationManager.IMPORTANCE_HIGH,
-        ).apply { description = "New temporary e-mail notifications" }
+        ).apply { description = context.getString(R.string.notification_channel_desc) }
         manager.createNotificationChannel(channel)
     }
 

@@ -1,6 +1,12 @@
 # ---- App ----
--keepattributes *Annotation*, JavascriptInterface
--keepclassmembers class com.yourname.tempmail.** { *; }
+-keepattributes *Annotation*, JavascriptInterface, Signature, Exceptions, EnclosingMethod, InnerClasses
+# Keep Room entities (reflected by Room) and @Entity / @Dao annotated types
+-keep class com.yourname.tempmail.data.db.** { *; }
+-keepclassmembers class com.yourname.tempmail.data.db.** { *; }
+# Keep JSoup bridge / WebView JavascriptInterface targets (none currently, reserved)
+-keepclassmembers class com.yourname.tempmail.** {
+    @android.webkit.JavascriptInterface <methods>;
+}
 
 # ---- LevelPlay / ironSource (Unity Grow) ----
 -keep class com.ironsource.** { *; }

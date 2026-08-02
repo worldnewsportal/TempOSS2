@@ -42,12 +42,12 @@ class MessageRepository(
         val result = provider.listMessages(mailbox)
         if (result !is ProviderResult.Success) return 0
         val thumbs = result.data
-        val existingSigned = messageDao.allForMailbox(mailbox.id)
+        val existingSeen = messageDao.allForMailbox(mailbox.id)
             .map { it.providerRawId }.toSet()
 
         var changed = 0
         thumbs.forEach { t ->
-            if (t.providerRawId !in existingSigned) {
+            if (t.providerRawId !in existingSeen) {
                 messageDao.insert(
                     MessageEntity(
                         mailboxId = mailbox.id,
@@ -63,7 +63,11 @@ class MessageRepository(
                 changed++
             }
         }
+        // Refresh unread count + lastSyncedAt on the mailbox so the UI shows fresh state.
         val unread = messageDao.unreadCount(mailbox.id)
+        db.mailboxDao().byId(mailbox.id)?.let { e ->
+            db.mailboxDao().update(e.copy(unreadCount = unread, lastSyncedAt = System.currentTimeMillis()))
+        }
         return changed
     }
 

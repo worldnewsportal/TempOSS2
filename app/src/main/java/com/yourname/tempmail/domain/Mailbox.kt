@@ -26,5 +26,5 @@ data class MailboxCredentials(
 
 sealed interface ProviderResult<out T> {
     data class Success<T>(val data: T) : ProviderResult<T>
-    data class Failure(val reason: String, val cause: Exception? = null) : ProviderResult<Nothing>
+    data class Failure(val reason: String, val cause: Throwable? = null) : ProviderResult<Nothing>
 }

@@ -121,7 +121,7 @@ fun copyMailbox(context: Context, mailbox: Mailbox) {
 @Composable
 private fun BannerSlot(container: AppContainer) {
     val activity = LocalContext.current as? android.app.Activity ?: return
-    val view = container.ads.banner.load(activity)
+    val view = remember(activity) { container.ads.banner.load(activity) }
     if (view != null) {
         AndroidView(
             factory = { view },

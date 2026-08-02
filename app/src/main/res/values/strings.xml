@@ -43,7 +43,7 @@
     <string name="unfavorite">Remove favorite</string>
     <string name="rename">Rename</string>
     <string name="open">Open</string>
-    <string name="username_invalid_chars">Username contains invalid characters. Use letters, digits, dot, dash or underscore.</string>
+    <string name="username_invalid_chars">Username contains invalid characters. Use letters, digits, dot, dash, underscore or plus.</string>
     <string name="username_too_short">Username is too short (minimum 3 characters).</string>
     <string name="username_too_long">Username is too long (maximum 64 characters).</string>
     <string name="username_reserved">This username is reserved and cannot be used.</string>
@@ -56,6 +56,7 @@
     <!-- Message list -->
     <string name="no_messages">No messages yet. Incoming emails will appear here.</string>
     <string name="unread_count">%1$d unread</string>
+    <string name="no_subject">(no subject)</string>
     <string name="messages">Messages</string>
     <string name="attachments">Attachments</string>
     <string name="attachment_name_size">%1$s · %2$s</string>

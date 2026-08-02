@@ -27,11 +27,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.yourname.tempmail.R
 import com.yourname.tempmail.di.AppContainer
@@ -45,6 +47,7 @@ fun SettingsScreen(
     onBack: () -> Unit,
 ) {
     val settings = container.settings
+    val scope = rememberCoroutineScope()
 
     val theme by settings.theme.collectAsStateWithLifecycle(initialValue = "system")
     val notifications by settings.notifications.collectAsStateWithLifecycle(initialValue = true)
@@ -81,24 +84,24 @@ fun SettingsScreen(
             Labeled(
                 title = stringResource(R.string.notif_enabled),
                 checked = notifications,
-                onCheckedChange = { settings.setNotifications(it) },
+                onCheckedChange = { scope.launch { settings.setNotifications(it) } },
             )
             Labeled(
                 title = stringResource(R.string.notif_sound),
                 checked = notifSound,
                 enabled = notifications,
-                onCheckedChange = { settings.setNotifSound(it) },
+                onCheckedChange = { scope.launch { settings.setNotifSound(it) } },
             )
             Labeled(
                 title = stringResource(R.string.notif_vibrate),
                 checked = notifVibrate,
                 enabled = notifications,
-                onCheckedChange = { settings.setNotifVibrate(it) },
+                onCheckedChange = { scope.launch { settings.setNotifVibrate(it) } },
             )
             Labeled(
                 title = stringResource(R.string.ads_opt_in_title),
                 checked = adsEnabled,
-                onCheckedChange = { settings.setAdsEnabled(it) },
+                onCheckedChange = { scope.launch { settings.setAdsEnabled(it) } },
             )
 
             Spacer(Modifier.height(16.dp))
@@ -133,7 +136,7 @@ private fun ThemeDropdown(themeKey: String, onSelect: (String) -> Unit) {
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             modifier = Modifier
                 .fillMaxWidth()
-                .menuAnchor(),
+                .menuAnchor(ExposedDropdownMenuDefaults.MenuAnchorType.PrimaryNotEditable),
         )
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             options.forEach { option ->

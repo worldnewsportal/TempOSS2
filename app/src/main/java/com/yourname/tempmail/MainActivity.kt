@@ -15,10 +15,12 @@ import com.yourname.tempmail.ui.theme.TempmailTheme
 import com.yourname.tempmail.ui.theme.ThemeMode
 
 class MainActivity : ComponentActivity() {
+
+    private val container by lazy { (application as TempmailApp).container }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        val container = (application as TempmailApp).container
         setContent {
             val vm: TempmailAppViewModel = viewModel(factory = TempmailAppViewModelFactory(container))
             val themeKey by vm.themeMode.collectAsStateWithLifecycle(initialValue = SettingsUiState.themeDefaultKey)
@@ -31,5 +33,20 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        container.ads.onActivityResume(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        container.ads.onActivityPause()
+    }
+
+    override fun onDestroy() {
+        container.ads.onActivityDestroy()
+        super.onDestroy()
     }
 }

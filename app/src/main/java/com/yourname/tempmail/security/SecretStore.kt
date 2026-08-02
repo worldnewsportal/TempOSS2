@@ -27,8 +27,8 @@ class SecretStore(private val context: Context) {
     }
 
     fun read(key: String): String? {
-        val stored = prefs.getString(key, null) ?: return null
-        return decrypt(storedBytes(stored))
+        val encoded = prefs.getString(key, null) ?: return null
+        return decrypt(base64Decode(encoded))
     }
 
     fun remove(key: String) { prefs.edit().remove(key).apply() }
@@ -67,7 +67,7 @@ class SecretStore(private val context: Context) {
     }
 
     private fun base64Encode(b: ByteArray) = Base64.encodeToString(b, Base64.NO_WRAP)
-    private fun stored(s: String): ByteArray = Base64.decode(s, Base64.NO_WRAP)
+    private fun base64Decode(s: String): ByteArray = Base64.decode(s, Base64.NO_WRAP)
 
     companion object {
         private const val TRANS = "AES/GCM/NoPadding"

@@ -19,7 +19,6 @@ import com.yourname.tempmail.security.SecretStore
 import kotlinx.coroutines.flow.Flow
 import java.text.SimpleDateFormat
 import java.util.Locale
-import java.util.TimeZone
 import kotlin.random.Random
 
 /**
@@ -61,7 +60,7 @@ class MailtmProvider(
                 ProviderResult.Failure("err.provider")
             }
         } catch (e: Exception) {
-            ProviderResult.Failure("err.timeout", e)
+            NetworkClient.toResult(e)
         }
     }
 
@@ -95,7 +94,7 @@ class MailtmProvider(
             secretStore.put(tokenKey(address), token)
             ProviderResult.Success(Unit)
         } catch (e: Exception) {
-            ProviderResult.Failure("err.timeout", e)
+            NetworkClient.toResult(e)
         }
     }
 
@@ -117,7 +116,7 @@ class MailtmProvider(
                 )
             })
         } catch (e: Exception) {
-            ProviderResult.Failure("err.timeout", e)
+            NetworkClient.toResult(e)
         }
     }
 
@@ -156,7 +155,7 @@ class MailtmProvider(
                 )
             )
         } catch (e: Exception) {
-            ProviderResult.Failure("err.timeout", e)
+            NetworkClient.toResult(e)
         }
     }
 
@@ -167,7 +166,7 @@ class MailtmProvider(
             val r = api.markSeen("Bearer $token", messageId, MailTmSeenRequest(seen))
             if (r.isSuccessful) ProviderResult.Success(Unit) else ProviderResult.Failure("err.provider")
         } catch (e: Exception) {
-            ProviderResult.Failure("err.timeout", e)
+            NetworkClient.toResult(e)
         }
     }
 
@@ -189,7 +188,7 @@ class MailtmProvider(
                 ProviderResult.Failure("err.provider")
             }
         } catch (e: Exception) {
-            ProviderResult.Failure("err.timeout", e)
+            NetworkClient.toResult(e)
         }
     }
 
