@@ -58,7 +58,7 @@ interface MessageDao {
     suspend fun insertAll(msgs: List<MessageEntity>): List<Long>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(msg: MessageEntity): List<Long>
+    suspend fun insert(msg: MessageEntity): Long
 
     @Update
     suspend fun update(msg: MessageEntity)
