@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <exclude domain="sharedpref" path="secret_store.xml" />
+    <exclude domain="database" path="tempmail.db" />
+    <exclude domain="sharedpref" path="tempmail-preferences.xml" />
+    <exclude domain="file" path="attachments/" />
+</full-backup-content>

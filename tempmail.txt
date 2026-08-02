@@ -1,0 +1,1600 @@
+MASTER PROMPT — BUILD A COMPLETE LIGHTWEIGHT OPEN-SOURCE TEMPORARY EMAIL APP
+
+ROLE
+
+Act as an expert Android developer, Kotlin engineer, backend engineer, email infrastructure engineer, cybersecurity engineer, UX/UI designer, localization engineer, DevOps engineer, and Open Source maintainer.
+
+Build a COMPLETE, REAL, production-ready Open Source temporary email application.
+
+This is NOT a prototype.
+
+Do NOT use mock emails.
+
+Do NOT use fake inboxes.
+
+Do NOT use fake ad rewards.
+
+Do NOT leave essential TODOs.
+
+Every essential feature must actually work.
+
+---
+
+1. CORE GOAL
+
+Build a lightweight Android application that provides disposable temporary email addresses.
+
+Each mailbox remains active for exactly 7 days.
+
+The user can create a new address at any time.
+
+There is NO cooldown.
+
+The user can change an address even one second after creating the previous one.
+
+Existing mailboxes remain available until their individual expiration.
+
+The user can have multiple active mailboxes.
+
+---
+
+2. TECHNOLOGY — SIMPLIFY BUILD SYSTEM
+
+The developer considers traditional Gradle configuration unnecessarily complicated.
+
+Use the simplest practical Android build setup possible WITHOUT sacrificing functionality.
+
+IMPORTANT:
+
+Do NOT replace Android's required build system with an unstable or experimental alternative merely to avoid Gradle.
+
+Instead:
+
+- Use the minimum necessary Gradle configuration.
+- Keep build files extremely small.
+- Avoid unnecessary plugins.
+- Avoid unnecessary dependencies.
+- Centralize dependency versions.
+- Use a single app module unless multiple modules are genuinely necessary.
+- Avoid complex custom Gradle scripts.
+- Avoid unnecessary build flavors.
+- Avoid complicated dependency graphs.
+- Avoid unnecessary Kotlin compiler plugins.
+- Prefer stable Android tooling.
+
+The developer should ideally only need:
+
+Android Studio
+
+and:
+
+Build
+
+Run
+
+Generate APK
+
+No manual Gradle commands should be necessary for normal development.
+
+Provide:
+
+README instructions
+
+one-click Android Studio build instructions
+
+and a simple release workflow.
+
+If a build tool other than Gradle becomes officially stable and fully compatible with the selected Android stack, it may be considered, but NEVER sacrifice reliability just to eliminate Gradle.
+
+---
+
+3. ANDROID STACK
+
+Use:
+
+Kotlin
+
+Jetpack Compose
+
+Material 3
+
+Android Jetpack
+
+Coroutines
+
+Flow
+
+Room
+
+WorkManager
+
+DataStore
+
+Hilt only if genuinely beneficial; otherwise use a simpler dependency injection approach.
+
+Retrofit or Ktor Client
+
+Coil
+
+Android Keystore
+
+Modern Android APIs
+
+Target the latest stable Android SDK available during implementation.
+
+Minimum Android version:
+
+Android 10+
+
+---
+
+4. PROJECT PRIORITIES
+
+Priority order:
+
+1. Reliability
+2. Real functionality
+3. Security
+4. Lightweight performance
+5. Simplicity
+6. Maintainability
+7. UI polish
+
+Do not add unnecessary libraries.
+
+---
+
+5. EMAIL PROVIDER SYSTEM
+
+Use a provider abstraction.
+
+The application must support multiple temporary email providers.
+
+Create:
+
+EmailProvider
+
+ProviderCapabilities
+
+ProviderManager
+
+ProviderHealth
+
+ProviderRegistry
+
+Each provider declares its capabilities.
+
+Examples:
+
+supportsReceiving
+
+supportsSending
+
+supportsReply
+
+supportsForward
+
+supportsAttachments
+
+supportsCustomUsername
+
+supportsMultipleDomains
+
+supportsRealtime
+
+supportsSearch
+
+---
+
+6. MULTIPLE DOMAINS
+
+Support multiple real email domains.
+
+Domains must be fetched dynamically where possible.
+
+Never display a domain that cannot actually be used.
+
+Display:
+
+username@domain1
+
+username@domain2
+
+username@domain3
+
+etc.
+
+Allow the user to choose a domain.
+
+If a provider becomes unavailable:
+
+Hide unavailable domains.
+
+Try another provider when appropriate.
+
+---
+
+7. CUSTOM USERNAME
+
+Support:
+
+Random username
+
+Custom username
+
+Username suggestions
+
+Availability checking where supported
+
+Example:
+
+mohammad2026@domain.example
+
+Validate:
+
+Allowed characters
+
+Length
+
+Provider restrictions
+
+Reserved names
+
+Availability
+
+Never claim availability without actually checking.
+
+---
+
+8. RANDOM EMAIL
+
+One button:
+
+Generate Email
+
+Generate a secure random username.
+
+---
+
+9. CHANGE EMAIL
+
+Button:
+
+Change Email
+
+Must work immediately.
+
+No cooldown.
+
+No artificial waiting.
+
+No 30-second timer.
+
+No daily limit.
+
+No forced advertisement.
+
+The user can generate another address immediately.
+
+Previous mailboxes remain active.
+
+---
+
+10. MAILBOX LIFETIME
+
+Exactly 7 days per mailbox.
+
+Store:
+
+createdAt
+
+expiresAt
+
+provider
+
+mailbox ID
+
+address
+
+credentials/tokens when required
+
+Show:
+
+7 days remaining
+
+6 days 23 hours remaining
+
+etc.
+
+When expired:
+
+Stop synchronization.
+
+Delete local cached message data.
+
+Remove mailbox from active mailboxes.
+
+Do not delete unexpired mailboxes.
+
+---
+
+11. MULTIPLE MAILBOXES
+
+Allow multiple active addresses.
+
+Mailbox Manager:
+
+Address
+
+Provider
+
+Domain
+
+Unread messages
+
+Expiration
+
+Favorite
+
+Rename
+
+Delete
+
+Open
+
+Copy
+
+Share
+
+---
+
+12. GMAIL-STYLE FEATURES
+
+Provide a modern email-client experience.
+
+Include:
+
+Inbox
+
+Sent
+
+Drafts
+
+Trash
+
+Spam
+
+Archive
+
+Starred
+
+Search
+
+Unread
+
+Attachments
+
+Conversation/thread view
+
+Message details
+
+---
+
+13. INBOX
+
+Show:
+
+Sender
+
+Email address
+
+Subject
+
+Preview
+
+Time
+
+Unread badge
+
+Attachment badge
+
+Star
+
+Labels
+
+Swipe:
+
+Read/unread
+
+Archive
+
+Delete
+
+---
+
+14. EMAIL READER
+
+Support real:
+
+HTML
+
+Plain text
+
+Images
+
+Links
+
+Formatting
+
+Tables
+
+Lists
+
+Headers
+
+Attachments
+
+Sender details
+
+Recipient details
+
+CC
+
+BCC
+
+Reply-To
+
+Date
+
+Message ID
+
+Sanitize HTML.
+
+Never execute arbitrary JavaScript from email content.
+
+Protect against malicious HTML.
+
+---
+
+15. SEND EMAIL
+
+Add:
+
+Compose
+
+The user can send messages to external email addresses ONLY when the selected provider genuinely supports outbound email.
+
+Fields:
+
+From
+
+To
+
+CC
+
+BCC
+
+Subject
+
+Body
+
+Attachments
+
+Send
+
+Never fake successful delivery.
+
+Only show "Sent" after the provider confirms successful submission.
+
+If the provider does not support sending:
+
+Disable the send capability.
+
+Explain the limitation in the user's language.
+
+If another compatible provider exists, offer it.
+
+---
+
+16. REPLY / FORWARD
+
+Where supported:
+
+Reply
+
+Reply all
+
+Forward
+
+Preserve email threading headers where supported.
+
+If unsupported:
+
+Disable gracefully.
+
+Never fake the functionality.
+
+---
+
+17. DRAFTS
+
+Auto-save drafts.
+
+Recover drafts after restarting the app.
+
+Associate drafts with the correct mailbox.
+
+---
+
+18. ATTACHMENTS
+
+Support real attachments where the provider allows them.
+
+Include:
+
+Images
+
+PDF
+
+Documents
+
+TXT
+
+ZIP
+
+Other safe file types
+
+Show:
+
+Name
+
+Size
+
+Type
+
+Download
+
+Open
+
+Share
+
+Apply safe size limits.
+
+---
+
+19. SEARCH
+
+Search:
+
+Sender
+
+Recipient
+
+Subject
+
+Body
+
+Email address
+
+Attachment filename
+
+Fast local search where possible.
+
+---
+
+20. NOTIFICATIONS
+
+Real incoming-email notifications.
+
+Show:
+
+Sender
+
+Subject
+
+Preview
+
+Open message action
+
+Settings:
+
+Notifications on/off
+
+Sound
+
+Vibration
+
+Preview
+
+Silent
+
+---
+
+21. AUTO REFRESH
+
+Options:
+
+10 seconds
+
+30 seconds
+
+1 minute
+
+5 minutes
+
+10 minutes
+
+Manual
+
+Respect provider API limits.
+
+Do not hammer APIs.
+
+Use efficient polling or realtime mechanisms where available.
+
+---
+
+22. OFFLINE CACHE
+
+When offline, display cached:
+
+Mailboxes
+
+Messages
+
+Drafts
+
+Favorites
+
+Settings
+
+Never pretend cached data is newly synchronized.
+
+---
+
+23. SECURITY
+
+HTTPS only.
+
+Secure token storage.
+
+Android Keystore where appropriate.
+
+No sensitive information in logs.
+
+No API secrets in source code.
+
+No private SMTP credentials inside the APK.
+
+Sanitize HTML.
+
+Validate URLs.
+
+Safe attachment handling.
+
+---
+
+24. ARABIC + ENGLISH
+
+Exactly two languages:
+
+Arabic
+
+English
+
+Runtime switching.
+
+Perfect RTL/LTR.
+
+If Arabic is selected:
+
+EVERY application-generated UI element must be Arabic.
+
+No accidental English UI text.
+
+If English is selected:
+
+Everything must be English.
+
+Never translate:
+
+Email addresses
+
+Domain names
+
+User-generated email content
+
+File names
+
+URLs
+
+Provider names when they are official brand names
+
+---
+
+25. THEMES
+
+System
+
+Light
+
+Dark
+
+OLED Black
+
+Persist preference.
+
+---
+
+26. UNITY ADS — THREE REAL AD TYPES
+
+Implement REAL production-ready Unity advertising.
+
+The app must support:
+
+1. Banner Ads
+2. Interstitial Ads
+3. Rewarded Ads
+
+Do NOT use fake advertisements.
+
+Do NOT implement fake timers.
+
+Do NOT grant fake rewards.
+
+Do NOT use hardcoded fake ad responses.
+
+---
+
+27. UNITY ADS ARCHITECTURE
+
+Create:
+
+AdsManager
+
+BannerAdManager
+
+InterstitialAdManager
+
+RewardedAdManager
+
+AdConfiguration
+
+AdAvailabilityState
+
+RewardManager
+
+The ad system must be isolated from the rest of the application.
+
+Email functionality must continue to work if ads fail.
+
+---
+
+28. BANNER ADS
+
+Implement real Banner Ads.
+
+Locations:
+
+Home screen
+
+Mailbox manager
+
+Possibly inbox list
+
+DO NOT place banners:
+
+Inside email body
+
+Over compose fields
+
+Over important buttons
+
+Over navigation
+
+Over attachments
+
+Avoid accidental clicks.
+
+Respect safe areas.
+
+Support:
+
+Arabic
+
+English
+
+Dark mode
+
+Light mode
+
+Different screen sizes.
+
+---
+
+29. INTERSTITIAL ADS
+
+Implement real Interstitial Ads.
+
+Do NOT display them aggressively.
+
+Do NOT show an interstitial:
+
+When opening the app
+
+When reading an email
+
+While composing
+
+When sending
+
+Immediately after receiving an email
+
+During important actions
+
+Instead, show them only at natural transition points.
+
+Implement cooldown logic.
+
+Example:
+
+After a reasonable number of navigation actions.
+
+The exact frequency must be configurable.
+
+If an ad is not loaded:
+
+Continue normally.
+
+Never block the user waiting for an ad.
+
+---
+
+30. REWARDED ADS
+
+Implement real Rewarded Ads.
+
+Use them only for OPTIONAL features.
+
+Examples:
+
+Unlock extra mailbox slots
+
+Unlock advanced organization features
+
+Unlock optional premium customization
+
+Unlock additional non-essential features
+
+The core email functionality must remain available without forcing users to watch advertisements.
+
+---
+
+31. REAL REWARD VALIDATION
+
+VERY IMPORTANT:
+
+Never give a reward simply because the app waited 60 seconds.
+
+Never give a reward because:
+
+onAdShown
+
+onAdClicked
+
+onAdClosed
+
+The reward is granted ONLY after the official rewarded-ad SDK callback confirms successful completion.
+
+Handle:
+
+Loaded
+
+Failed
+
+Shown
+
+Clicked
+
+Closed
+
+Rewarded
+
+Expired
+
+and the equivalent callbacks in the current official SDK.
+
+---
+
+32. "WATCH AD FOR REWARD"
+
+When the user presses:
+
+Watch Advertisement
+
+then:
+
+1. Check whether an ad is available.
+2. Show the actual rewarded advertisement.
+3. Wait for the real SDK reward callback.
+4. Grant the reward ONLY after successful completion.
+5. Save the reward state.
+6. Update the UI.
+
+If the user closes the ad early:
+
+NO reward.
+
+If the ad fails:
+
+NO reward.
+
+If the ad never loads:
+
+NO reward.
+
+---
+
+33. ONE-MINUTE REWARD
+
+If the product design says:
+
+"Watch an advertisement for approximately one minute"
+
+DO NOT implement a fake 60-second timer.
+
+Do not artificially keep the user inside an advertisement.
+
+The actual ad network decides the advertisement duration.
+
+The reward is based on the official completion event.
+
+---
+
+34. PRODUCTION ADS VS TEST ADS
+
+During development:
+
+Use official Unity test mode/test configuration.
+
+Production release:
+
+Use production ad configuration.
+
+Create clear separation:
+
+DEBUG = test ads
+
+RELEASE = production ads
+
+Never accidentally publish a release build configured for test ads.
+
+---
+
+35. UNITY CONFIGURATION
+
+Never commit private credentials.
+
+Use:
+
+local.properties
+
+environment variables
+
+GitHub Secrets
+
+or secure release configuration.
+
+Provide:
+
+local.properties.example
+
+Explain exactly where the developer enters:
+
+Unity Game ID
+
+Banner Ad Unit ID
+
+Interstitial Ad Unit ID
+
+Rewarded Ad Unit ID
+
+Do not invent these values.
+
+---
+
+36. UNITY SDK VERSION
+
+Before implementing:
+
+Check the latest official Unity documentation.
+
+Use currently supported Android SDK APIs.
+
+Do not use obsolete/deprecated integration instructions.
+
+If Unity currently recommends LevelPlay/mediation instead of legacy direct integration, implement the recommended stable approach.
+
+---
+
+37. AD PRIVACY
+
+Implement appropriate consent/privacy handling required by the current ad SDK and applicable jurisdictions.
+
+Do not collect unnecessary user data.
+
+Clearly disclose third-party advertising.
+
+---
+
+38. AD FAILURE
+
+If no ad is available:
+
+Display a localized message.
+
+Do not lock the feature forever.
+
+Allow retry.
+
+Do not repeatedly request ads in a tight loop.
+
+Do not crash.
+
+---
+
+39. LANGUAGE OF ADS
+
+The application UI must remain fully localized.
+
+Advertisement content itself is controlled by the ad network and may not always match the selected app language.
+
+Do NOT attempt to translate or alter third-party advertisements.
+
+---
+
+40. PROVIDER LIMITATIONS
+
+Never promise:
+
+Unlimited sending
+
+Unlimited domains
+
+Unlimited accounts
+
+100% anonymity
+
+Forever-free providers
+
+unless actually guaranteed.
+
+Display provider limitations accurately.
+
+---
+
+41. FREE-FIRST DESIGN
+
+The app itself must be free and Open Source.
+
+Use free APIs and free services where legally permitted.
+
+Do not require a paid subscription.
+
+Do not force users to create accounts.
+
+However, do NOT pretend third-party services are guaranteed to remain free forever.
+
+---
+
+42. BACKEND
+
+Use a backend ONLY where genuinely necessary.
+
+Prefer lightweight infrastructure.
+
+Possible:
+
+Cloudflare Workers
+
+Deno
+
+Node.js
+
+Go
+
+or another lightweight Open Source backend.
+
+Never put private SMTP credentials or provider secrets inside the Android application.
+
+---
+
+43. OUTBOUND EMAIL
+
+Outbound email must be implemented separately from receiving.
+
+Provider API
+
+SMTP submission
+
+or secure backend relay
+
+may be used ONLY when legitimately supported.
+
+Do not create:
+
+Open SMTP relay
+
+spam infrastructure
+
+unauthorized forwarding system
+
+bulk-mail system
+
+---
+
+44. ANTI-ABUSE
+
+Implement sensible sending limits.
+
+Prevent:
+
+Mass mailing
+
+Spam automation
+
+Rapid repeated sending
+
+Provider abuse
+
+Excessive API requests
+
+---
+
+45. DATABASE
+
+Use Room.
+
+Entities:
+
+MailboxEntity
+
+MessageEntity
+
+AttachmentEntity
+
+DraftEntity
+
+ProviderEntity
+
+SettingsEntity
+
+AdRewardEntity
+
+FavoriteEntity
+
+Store expiration information and provider identifiers.
+
+---
+
+46. PERFORMANCE
+
+The application must be lightweight.
+
+Minimize:
+
+RAM
+
+CPU
+
+battery
+
+network requests
+
+background processing
+
+dependencies
+
+APK size
+
+Use:
+
+LazyColumn
+
+pagination
+
+caching
+
+streaming attachments
+
+efficient synchronization
+
+---
+
+47. SIMPLE ARCHITECTURE
+
+Use a clean but not over-engineered structure.
+
+Prefer:
+
+presentation
+
+domain
+
+data
+
+providers
+
+database
+
+ads
+
+network
+
+security
+
+workers
+
+localization
+
+Do not create dozens of unnecessary modules.
+
+---
+
+48. DEPENDENCY MINIMALISM
+
+Before adding a dependency, ask:
+
+"Can Android/Kotlin/Jetpack already do this?"
+
+If yes:
+
+Do not add another library.
+
+Avoid dependency bloat.
+
+---
+
+49. TESTING
+
+Implement:
+
+Unit tests
+
+UI tests
+
+Integration tests
+
+Localization tests
+
+Provider tests
+
+Ad-state tests
+
+Expiration tests
+
+Database tests
+
+Network failure tests
+
+---
+
+50. ARABIC TESTING
+
+Test every screen in Arabic.
+
+Test:
+
+RTL
+
+Long Arabic strings
+
+Large font
+
+Notifications
+
+Dialogs
+
+Buttons
+
+Error messages
+
+Email screens
+
+Compose screen
+
+Settings
+
+Ad-related messages
+
+---
+
+51. ENGLISH TESTING
+
+Test all screens in English.
+
+No accidental Arabic strings.
+
+---
+
+52. BUILD SIMPLICITY
+
+The developer must be able to:
+
+Open project
+
+Wait for dependencies
+
+Press Run
+
+and get the application.
+
+Provide exact instructions for:
+
+Android Studio
+
+Debug build
+
+Release build
+
+APK generation
+
+AAB generation
+
+Signing
+
+Google Play release
+
+---
+
+53. GITHUB ACTIONS
+
+Create simple GitHub Actions:
+
+Build
+
+Test
+
+Lint
+
+Release artifact
+
+Do not make CI unnecessarily complicated.
+
+Use GitHub Secrets for:
+
+Unity configuration
+
+signing
+
+backend secrets
+
+---
+
+54. OPEN SOURCE FILES
+
+Include:
+
+LICENSE
+
+README.md
+
+CONTRIBUTING.md
+
+SECURITY.md
+
+CODE_OF_CONDUCT.md
+
+PRIVACY.md
+
+TERMS.md
+
+THIRD_PARTY_SERVICES.md
+
+CHANGELOG.md
+
+---
+
+55. README
+
+Explain:
+
+Installation
+
+Building
+
+Running
+
+Provider architecture
+
+Adding a provider
+
+Custom username
+
+Domains
+
+Sending
+
+Unity Banner Ads
+
+Unity Interstitial Ads
+
+Unity Rewarded Ads
+
+Production ad configuration
+
+Test ad configuration
+
+Privacy
+
+Limitations
+
+---
+
+56. NO SECRETS IN SOURCE
+
+Never commit:
+
+Unity private secrets
+
+SMTP passwords
+
+Provider passwords
+
+Backend secrets
+
+Signing keys
+
+Keystore passwords
+
+---
+
+57. FINAL QUALITY
+
+The final application must be:
+
+REAL
+
+LIGHTWEIGHT
+
+FAST
+
+SECURE
+
+OPEN SOURCE
+
+FREE TO USE
+
+BILINGUAL
+
+RTL/LTR
+
+PRODUCTION READY
+
+NO MOCK EMAILS
+
+NO FAKE ADS
+
+NO FAKE REWARDS
+
+NO FAKE SEND
+
+NO ARTIFICIAL CHANGE-EMAIL DELAY
+
+NO MIXED LANGUAGE UI
+
+NO UNNECESSARY DEPENDENCIES
+
+NO UNNECESSARY GRADLE COMPLEXITY
+
+---
+
+58. FINAL DELIVERABLE
+
+Generate the COMPLETE project.
+
+Include:
+
+All Kotlin source
+
+All Compose UI
+
+All ViewModels
+
+All repositories
+
+All use cases
+
+All provider adapters
+
+All API interfaces
+
+Room
+
+WorkManager
+
+Notifications
+
+Unity Banner Ads
+
+Unity Interstitial Ads
+
+Unity Rewarded Ads
+
+Reward validation
+
+Arabic resources
+
+English resources
+
+Manifest
+
+Gradle configuration
+
+ProGuard/R8
+
+GitHub Actions
+
+Tests
+
+README
+
+License
+
+Documentation
+
+Configuration templates
+
+---
+
+59. FINAL BUILD REQUIREMENT
+
+The project must compile from a clean checkout.
+
+Verify:
+
+Dependencies
+
+Kotlin
+
+Compose
+
+Manifest
+
+Resources
+
+R8
+
+ProGuard
+
+Unity SDK
+
+Room
+
+WorkManager
+
+Localization
+
+Release configuration
+
+Do not consider the project complete until the application can actually be built.
+
+---
+
+60. MOST IMPORTANT RULE
+
+Never fake functionality.
+
+If a provider does not support a feature:
+
+Detect it.
+
+Disable it.
+
+Explain the limitation.
+
+Offer another provider if one genuinely supports it.
+
+Never pretend.
+
+Build a real application rather than a visual prototype.

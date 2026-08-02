@@ -1,0 +1,20 @@
+# Gradle
+.gradle/
+build/
+local.properties
+*.apk
+*.aab
+
+# Kotlin / IntelliJ
+.kotlin/
+.idea/
+*.iml
+captures/
+.DS_Store
+
+# Android Studio
+*.log
+output-metadata.json
+
+# Unity / LevelPlay keys live only in the developer's local.properties
+# (never commit real ad identifiers)

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="sharedpref" path="secret_store.xml" />
+        <exclude domain="database" path="tempmail.db" />
+        <exclude domain="sharedpref" path="tempmail-preferences.xml" />
+        <exclude domain="file" path="attachments/" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" />
+    </device-transfer>
+</data-extraction-rules>

@@ -1,0 +1,21 @@
+## SDK location (auto-created by Android Studio on first sync, do not commit)
+# sdk.dir=/Users/yourname/Library/Android/sdk
+
+## =============================================================
+## UNITY GROW / LEVELPLAY CONFIGURATION (production secrets)
+## =============================================================
+## Fill in values from your Unity LevelPlay dashboard:
+##   https://platform.ironsrc.com/partners/identity/login
+##
+## appKey      - identifies the application (was "Game ID" in legacy Unity Ads)
+## bannerId    - Banner ad unit ID
+## interstitialId - Interstitial ad unit ID
+## rewardedId  - Rewarded ad unit ID
+##
+## Placeholder values below keep the project buildable. Replace them with
+## your OWN dashboard values before any release. Never commit real values.
+
+unity.appKey=YOUR_UNITY_APP_KEY
+unity.banner.adUnitId=YOUR_BANNER_AD_UNIT_ID
+unity.interstitial.adUnitId=YOUR_INTERSTITIAL_AD_UNIT_ID
+unity.rewarded.adUnitId=YOUR_REWARDED_AD_UNIT_ID
